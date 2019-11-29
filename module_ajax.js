@@ -6,14 +6,14 @@
 
 
 /** Унифицированный модуль AJAX-запросов на базе jQuery.
- *	@version 1.0.0
+ *	@version 1.2.0
  *	@author Leonid Petukhov
  */
 /*var module_ajax = */(function($) {
 	/** Имя модуля */
 	var MODULE_NAME = 'module_ajax';
 	/** Версия модуля */
-	var MODULE_VERSION = '1.1.0';
+	var MODULE_VERSION = '1.2.0';
 	/* Автор модуля */
 	var MODULE_AUTHOR = 'Петухов Леонид';
 	/* Дата релиза модуля */
