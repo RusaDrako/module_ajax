@@ -7,7 +7,7 @@
 
 /** Унифицированный модуль AJAX-запросов на базе jQuery.
  *	@version 1.2.0
- *	@author Leonid Petukhov
+ *	@author Leonid Petukhov 
  */
 /*var module_ajax = */(function($) {
 	/** Имя модуля */
