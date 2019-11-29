@@ -115,24 +115,6 @@
 
 
 
-	/** Функция-обработчик: замена html-кода * /
-	function _update_container_id ($container_id, $html) {
-		var $element = $($container_id);
-		// Анимация оптическое угасание до 0 за 0,5 сек
-		$element.animate({'height':0},500,function() {
-			// Обновление информации в элементе
-			$element.html($html);
-//			alert($element.innerHeight());
-			// Анимация оптическое проявление до 1 за 0,5 сек
-			$element.animate({'height':$element.innerHeight()},500);
-//			$element.animate({'height':'110'},500);
-		});
-	}
-
-
-
-
-
 	/** Функция-обработчик: замена html-кода
 	 * @param string $container_id ID контейнера, который должен быть обновлён
 	 * @param string $html HTML-код обновления
@@ -193,15 +175,15 @@
 
 	/** Ajax-запрос с массивом данных, с последующим обновлением заданного контейнера (ID) результатом запроса
 	 * @param string $id_container ID контейнера, который должен быть обновлён
-	 * @param object $data Массив данных
+	 * @param object $data Объект с данными
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.array = function($id_container, $_data, $url) {
+	module_ajax.array = function($id_container, $data, $url) {
 		if (undefined === $url) { $url = '';}
 		// Формируем id контейнера
 		var $container_id	= '#' + $id_container;
 		// Получаем массив данных из объекта
-		var $data = _data_rework($_data);
+		var $_data = _data_rework($data);
 		// Выводим лог
 		console.log(MODULE_NAME + '->array: ', $url, ' => ', '; container: ', $id_container);
 		// Формируем функцию-обработчик
@@ -210,7 +192,7 @@
 			_update_container_id($container_id, $html);
 		}
 		// Выполняем запрос
-		_ajax_do($func, $data, $url, 'html');
+		_ajax_do($func, $_data, $url, 'html');
 	};
 
 
@@ -263,17 +245,17 @@
 
 	/** Ajax-запрос с массивом данных, с последующей обработкой функцией-обработчиком
 	 * @param string $id_container ID контейнера, который должен быть обновлён
-	 * @param string $id_form ID формы из которой беруться данные
+	 * @param object $data Объект с данными
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.array_func = function($func, $_data, $type, $url) {
+	module_ajax.array_func = function($func, $data, $type, $url) {
 		// Получаем массив данных из объекта
-		var $data = _data_rework($_data);
+		var $_data = _data_rework($data);
 		// Выводим лог
-		console.log(MODULE_NAME + '->array_func: ', $url, ' => ', '; data: ', $_data);
+		console.log(MODULE_NAME + '->array_func: ', $url, ' => ', '; data: ', $data);
 		// Выполняем запрос
-		_ajax_do($func, $data, $url, $type);
+		_ajax_do($func, $_data, $url, $type);
 	};
 
 
@@ -356,9 +338,7 @@
 
 
 
-	/** Очистка контейнеров соответствующих маске
-	 * @param string $mask Маска поиска контейнеров
-	 */
+	/** Возвращает объект с информацией о модуле */
 	module_ajax.info = function() {
 		return {
 			module: MODULE_NAME,
@@ -373,8 +353,7 @@
 
 
 
-	/** Выводит сообщение с информацией о модуле
-	 */
+	/** Выводит сообщение с информацией о модуле */
 	module_ajax.about = function() {
 		alert(MODULE_NAME + '\nВерсия: ' + MODULE_VERSION + '\nДата: ' + MODULE_DATE + '\nРазработчик: ' + MODULE_AUTHOR + '\n\n' + MODULE_DESCRIPTION);
 	};
