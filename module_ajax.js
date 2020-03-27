@@ -6,18 +6,18 @@
 
 
 /** Унифицированный модуль AJAX-запросов на базе jQuery.
- *	@version 1.2.0
- *	@author Leonid Petukhov 
+ *	@version 1.2.1
+ *	@author Leonid Petukhov
  */
 /*var module_ajax = */(function($) {
 	/** Имя модуля */
 	var MODULE_NAME = 'module_ajax';
 	/** Версия модуля */
-	var MODULE_VERSION = '1.2.0';
+	var MODULE_VERSION = '1.2.1';
 	/* Автор модуля */
 	var MODULE_AUTHOR = 'Петухов Леонид';
 	/* Дата релиза модуля */
-	var MODULE_DATE = '2019-10-15';
+	var MODULE_DATE = '2020-01-17';
 	/* Описание модуля */
 	var MODULE_DESCRIPTION = 'Унифицированный модуль AJAX-запросов на базе jQuery.';
 	/* Объект */
@@ -30,8 +30,8 @@
 	/** Функция ajax-запроса html-кода и возврата результата
 	 * @param function $function Функция обработчик
 	 * @param object $data Массив данных
-	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
+	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 */
 	function _ajax_do($function, $data, $url, $type) {
 		if ($type === undefined) { $type = 'html';}
@@ -116,11 +116,11 @@
 
 
 	/** Функция-обработчик: замена html-кода
-	 * @param string $container_id ID контейнера, который должен быть обновлён
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param string $html HTML-код обновления
 	 */
-	function _update_container_id ($container_id, $html) {
-		var $element = $($container_id);
+	function _update_container ($container, $html) {
+		var $element = $($container);
 		// Анимация оптическое угасание до 0 за 0,5 сек
 		$element.animate({'opacity':0},500,function() {
 			// Обновление информации в элементе
@@ -150,23 +150,21 @@
 
 
 	/** Ajax-запрос по url, с последующим обновлением заданного контейнера (ID) результатом запроса
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.url = function($id_container, $url) {
-		// Формируем id контейнера
-		var $container_id	= '#' + $id_container;
+	module_ajax.url = function($container, $url) {
 		// Получаем объект данных
-		var $data = new FormData();
+		var $_data = new FormData();
 		// Выводим лог
-		console.log(MODULE_NAME + '->url: ', $url, ' => ', '; container: ', $id_container);
+		console.log(MODULE_NAME + '->url: ', $url, ' => ', '; container: ', $container);
 		// Формируем функцию-обработчик
 		var $func = function($html) {
 			// Обновление контейнера
-			_update_container_id($container_id, $html);
+			_update_container($container, $html);
 		}
 		// Выполняем запрос
-		_ajax_do($func, $data, $url, 'html');
+		_ajax_do($func, $_data, $url, 'html');
 	};
 
 
@@ -174,22 +172,19 @@
 
 
 	/** Ajax-запрос с массивом данных, с последующим обновлением заданного контейнера (ID) результатом запроса
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param object $data Объект с данными
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.array = function($id_container, $data, $url) {
-		if (undefined === $url) { $url = '';}
-		// Формируем id контейнера
-		var $container_id	= '#' + $id_container;
+	module_ajax.array = function($container, $data, $url) {
 		// Получаем массив данных из объекта
 		var $_data = _data_rework($data);
 		// Выводим лог
-		console.log(MODULE_NAME + '->array: ', $url, ' => ', '; container: ', $id_container);
+		console.log(MODULE_NAME + '->array: ', $url, ' => ', '; container: ', $container);
 		// Формируем функцию-обработчик
 		var $func = function($html) {
 			// Обновление контейнера
-			_update_container_id($container_id, $html);
+			_update_container($container, $html);
 		}
 		// Выполняем запрос
 		_ajax_do($func, $_data, $url, 'html');
@@ -200,25 +195,22 @@
 
 
 	/** Ajax-запрос с данными из формы, с последующим обновлением заданного контейнера (ID) результатом запроса
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param string $id_form ID формы из которой беруться данные
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.form = function($id_container, $id_form, $url) {
-		if (undefined === $url) { $url = '';}
-		// Формируем id контейнера
-		var $container_id	= '#' + $id_container;
+	module_ajax.form = function($container, $form, $url) {
 		// Получаем массив данных из заданной формы (по id)
-		var $data = new FormData($("#" + $id_form)[0]);
+		var $_data = new FormData($($form)[0]);
 		// Выводим лог
-		console.log(MODULE_NAME + '->form: ', $id_form, ' => ', '; container: ', $id_container);
+		console.log(MODULE_NAME + '->form: ', $form, ' => ', '; container: ', $container);
 		// Формируем функцию-обработчик
 		var $func = function($html) {
 			// Обновление контейнера
-			_update_container_id($container_id, $html);
+			_update_container($container, $html);
 		}
 		// Выполняем запрос
-		_ajax_do($func, $data, $url, 'html');
+		_ajax_do($func, $_data, $url, 'html');
 	};
 
 
@@ -226,17 +218,17 @@
 
 
 	/** Ajax-запрос по url, с последующей обработкой функцией-обработчиком
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $func Функция обработки ответа сервера function($data)
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
 	module_ajax.url_func = function($func, $type, $url) {
 		// Получаем массив данных из объекта
-		var $data = _data_rework({});
+		var $_data = _data_rework({});
 		// Выводим лог
-		console.log(MODULE_NAME + '->url_func: ', $url, ' => ', '; data: ', $data);
+		console.log(MODULE_NAME + '->url_func: ', $url, ' => ', '; data: ', $_data);
 		// Выполняем запрос
-		_ajax_do($func, $data, $url, $type);
+		_ajax_do($func, $_data, $url, $type);
 	};
 
 
@@ -244,7 +236,7 @@
 
 
 	/** Ajax-запрос с массивом данных, с последующей обработкой функцией-обработчиком
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $func Функция обработки ответа сервера function($data)
 	 * @param object $data Объект с данными
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
@@ -253,7 +245,7 @@
 		// Получаем массив данных из объекта
 		var $_data = _data_rework($data);
 		// Выводим лог
-		console.log(MODULE_NAME + '->array_func: ', $url, ' => ', '; data: ', $data);
+		console.log(MODULE_NAME + '->array_func: ', $url, ' => ', '; data: ', $_data);
 		// Выполняем запрос
 		_ajax_do($func, $_data, $url, $type);
 	};
@@ -263,18 +255,18 @@
 
 
 	/** Ajax-запрос с данными из формы, с последующей обработкой функцией-обработчиком
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $func Функция обработки ответа сервера function($data)
 	 * @param string $id_form ID формы из которой беруться данные
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.form_func = function($func, $id_form, $type, $url) {
+	module_ajax.form_func = function($func, $form, $type, $url) {
 		// Получаем массив данных из заданной формы (по id)
-		var $data = new FormData($("#" + $id_form)[0]);
+		var $_data = new FormData($($form)[0]);
 		// Выводим лог
-		console.log(MODULE_NAME + '->form_func: ', $url, ' => ', '; data: ', $data);
+		console.log(MODULE_NAME + '->form_func: ', $url, ' => ', '; data: ', $_data);
 		// Выполняем запрос
-		_ajax_do($func, $data, $url, $type);
+		_ajax_do($func, $_data, $url, $type);
 	};
 
 
@@ -282,17 +274,15 @@
 
 
 	/** Обновление заданного контейнера (ID) переданным содержимым
-	 * @param string id_container ID контейнера, который должен быть обновлён
-	 * @param string html_code HTML код, который надо добавить
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
+	 * @param string $html_code HTML код, который надо добавить
 	 */
-	module_ajax.update = function($id_container, $html_code) {
+	module_ajax.update = function($container, $html_code) {
 		if ($html_code === undefined) { $html_code = '';}
-		// Формируем id контейнера
-		var $container_id	= '#' + $id_container;
 		// Выводим лог
-		console.log(MODULE_NAME + '->update: Содержимое контейнера ' + $id_container + ' заменено на \'' + $html_code + '\'');
+		console.log(MODULE_NAME + '->update: Содержимое контейнера ' + $container + ' заменено на \'' + $html_code + '\'');
 		// Обновление контейнера
-		_update_container_id($container_id, $html_code);
+		_update_container($container, $html_code);
 	};
 
 
@@ -300,15 +290,13 @@
 
 
 	/** Очистка заданного контейнера (ID)
-	 * @param string $id_container ID контейнера, который должен быть обновлён
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 */
-	module_ajax.clean = function($id_container) {
-		// Формируем id контейнера
-		var $container_id	= '#' + $id_container;
+	module_ajax.clean = function($container) {
 		// Выводим лог
-		console.log(MODULE_NAME + '->clean: Содержимое контейнера ' + $id_container + ' удалено');
+		console.log(MODULE_NAME + '->clean: Содержимое контейнера ' + $container + ' удалено');
 		// Обновление контейнера
-		_update_container_id($container_id, '');
+		_update_container($container, '');
 	};
 
 
@@ -363,6 +351,5 @@
 
 	window.module_ajax = module_ajax;
 
-//	return module_ajax;
 /**/
-}(jQuery))
+}(jQuery));
