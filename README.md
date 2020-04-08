@@ -1,20 +1,17 @@
-# module_ajax
-# ver: 1.2.1
-Унифицированный модуль AJAX-запросов на базе jQuery.
+# Унифицированный модуль AJAX-запросов на базе jQuery. (module_ajax) ver: 1.2.1
 
+## Оглавление
 
+1. [Доступные методы](#Доступные-методы)
 
+## Доступные методы
 
-
+```JavaScript
 /** Ajax-запрос по url, с последующим обновлением заданного контейнера (ID) результатом запроса
  * @param string $container Объект или маркер контейнера, который должен быть обновлён
  * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
  */
 module_ajax.url($container, $url)
-
-
-
-
 
 /** Ajax-запрос с массивом данных, с последующим обновлением заданного контейнера (ID) результатом запроса
  * @param string $container Объект или маркер контейнера, который должен быть обновлён
@@ -23,10 +20,6 @@ module_ajax.url($container, $url)
  */
 module_ajax.array($container, $data, $url)
 
-
-
-
-
 /** Ajax-запрос с данными из формы, с последующим обновлением заданного контейнера (ID) результатом запроса
  * @param string $container Объект или маркер контейнера, который должен быть обновлён
  * @param string $id_form ID формы из которой беруться данные
@@ -34,20 +27,12 @@ module_ajax.array($container, $data, $url)
  */
 module_ajax.form($container, $id_form, $url)
 
-
-
-
-
 /** Ajax-запрос по url, с последующей обработкой функцией-обработчиком
  * @param string $func Функция обработки ответа сервера function($data)
  * @param string $type Тип ответа html/json (по умолчанию - html)
  * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
  */
 module_ajax.url_func($func, $type, $url)
-
-
-
-
 
 /** Ajax-запрос с массивом данных, с последующей обработкой функцией-обработчиком
  * @param string $func Функция обработки ответа сервера function($data)
@@ -57,10 +42,6 @@ module_ajax.url_func($func, $type, $url)
  */
 module_ajax.array_func($func, $data, $type, $url)
 
-
-
-
-
 /** Ajax-запрос с данными из формы, с последующей обработкой функцией-обработчиком
  * @param string $func Функция обработки ответа сервера function($data)
  * @param string $id_form ID формы из которой беруться данные
@@ -69,44 +50,23 @@ module_ajax.array_func($func, $data, $type, $url)
  */
 module_ajax.form_func($func, $id_form, $type, $url)
 
-
-
-
-
 /** Обновление заданного контейнера (ID) переданным содержимым
  * @param string $container Объект или маркер контейнера, который должен быть обновлён
  * @param string html_code HTML код, который надо добавить
  */
 module_ajax.update($container, $html_code)
 
-
-
-
-
 /** Очистка заданного контейнера (ID)
  * @param string $container Объект или маркер контейнера, который должен быть обновлён
  */
 module_ajax.clean($container)
 
-
-
-
-
 /** Очистка контейнеров соответствующих маске
  * @param string $mask Маска поиска контейнеров
  */
 module_ajax.clean_group($mask)
+```
 
+[:arrow_up:Оглавление](#Оглавление)
 
-
-
-
-/** Возвращает объект с параетрами модуля */
-module_ajax.info()
-
-
-
-
-
-/** Выводит сообщение с информацией о модуле */
-module_ajax.about()
+[![Logo](https://avatars0.githubusercontent.com/u/32844979?s=50 "RusaDrako")](https://github.com/RusaDrako/)
