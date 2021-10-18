@@ -5,11 +5,11 @@
 
 
 
-/** Унифицированный модуль AJAX-запросов на базе jQuery.
+/**
  *	@version 1.2.1
  *	@author Leonid Petukhov
  */
-/*var module_ajax = */(function($) {
+(function($) {
 	/** Имя модуля */
 	var MODULE_NAME = 'module_ajax';
 	/** Версия модуля */
@@ -21,7 +21,7 @@
 	/* Описание модуля */
 	var MODULE_DESCRIPTION = 'Унифицированный модуль AJAX-запросов на базе jQuery.';
 	/* Объект */
-	var module_ajax = {};
+	var object_module = {};
 
 
 
@@ -153,7 +153,7 @@
 	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.url = function($container, $url) {
+	object_module.url = function($container, $url) {
 		// Получаем объект данных
 		var $_data = new FormData();
 		// Выводим лог
@@ -176,7 +176,7 @@
 	 * @param object $data Объект с данными
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.array = function($container, $data, $url) {
+	object_module.array = function($container, $data, $url) {
 		// Получаем массив данных из объекта
 		var $_data = _data_rework($data);
 		// Выводим лог
@@ -199,7 +199,7 @@
 	 * @param string $id_form ID формы из которой беруться данные
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.form = function($container, $form, $url) {
+	object_module.form = function($container, $form, $url) {
 		// Получаем массив данных из заданной формы (по id)
 		var $_data = new FormData($($form)[0]);
 		// Выводим лог
@@ -222,7 +222,7 @@
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.url_func = function($func, $type, $url) {
+	object_module.url_func = function($func, $type, $url) {
 		// Получаем массив данных из объекта
 		var $_data = _data_rework({});
 		// Выводим лог
@@ -241,7 +241,7 @@
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.array_func = function($func, $data, $type, $url) {
+	object_module.array_func = function($func, $data, $type, $url) {
 		// Получаем массив данных из объекта
 		var $_data = _data_rework($data);
 		// Выводим лог
@@ -260,7 +260,7 @@
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	module_ajax.form_func = function($func, $form, $type, $url) {
+	object_module.form_func = function($func, $form, $type, $url) {
 		// Получаем массив данных из заданной формы (по id)
 		var $_data = new FormData($($form)[0]);
 		// Выводим лог
@@ -277,7 +277,7 @@
 	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param string $html_code HTML код, который надо добавить
 	 */
-	module_ajax.update = function($container, $html_code) {
+	object_module.update = function($container, $html_code) {
 		if ($html_code === undefined) { $html_code = '';}
 		// Выводим лог
 		console.log(MODULE_NAME + '->update: Содержимое контейнера ' + $container + ' заменено на \'' + $html_code + '\'');
@@ -292,7 +292,7 @@
 	/** Очистка заданного контейнера (ID)
 	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 */
-	module_ajax.clean = function($container) {
+	object_module.clean = function($container) {
 		// Выводим лог
 		console.log(MODULE_NAME + '->clean: Содержимое контейнера ' + $container + ' удалено');
 		// Обновление контейнера
@@ -306,7 +306,7 @@
 	/** Очистка контейнеров соответствующих маске
 	 * @param string $mask Маска поиска контейнеров
 	 */
-	module_ajax.clean_group = function($mask) {
+	object_module.clean_group = function($mask) {
 		// Выводим лог
 		console.log(MODULE_NAME + '->clean_group -> ' + $mask);
 		// Выполняем поиск элементов и их обработку
@@ -327,7 +327,7 @@
 
 
 	/** Возвращает объект с информацией о модуле */
-	module_ajax.info = function() {
+	object_module.info = function() {
 		return {
 			module: MODULE_NAME,
 			version: MODULE_VERSION,
@@ -342,14 +342,14 @@
 
 
 	/** Выводит сообщение с информацией о модуле */
-	module_ajax.about = function() {
+	object_module.about = function() {
 		alert(MODULE_NAME + '\nВерсия: ' + MODULE_VERSION + '\nДата: ' + MODULE_DATE + '\nРазработчик: ' + MODULE_AUTHOR + '\n\n' + MODULE_DESCRIPTION);
 	};
 
 
 
 
-	window.module_ajax = module_ajax;
+	window[MODULE_NAME] = object_module;
 
 /**/
 }(jQuery));
