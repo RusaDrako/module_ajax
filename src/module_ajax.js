@@ -64,31 +64,54 @@
 			success: function($result_data) {
 				$function($result_data);
 			},
-			error: function($jqXHR, $textStatus, $errorThrown) {
-				var msg = '';
-				if (jqXHR.status === 0) {
-					msg = 'Not connect.\n Verify Network.';
-				} else if (jqXHR.status == 404) {
-					msg = 'Requested page not found. [404]';
-				} else if (jqXHR.status == 500) {
-					msg = 'Internal Server Error [500].';
-				} else if (exception === 'parsererror') {
-					msg = 'Requested JSON parse failed.';
-				} else if (exception === 'timeout') {
-					msg = 'Time out error.';
-				} else if (exception === 'abort') {
-					msg = 'Ajax request aborted.';
-				} else {
-					msg = 'Uncaught Error.\n' + jqXHR.responseText;
-				}
+			error: function($jqXHR, exception) {
+				// Получаем текст ошибки
+				var msg = _func_error($jqXHR, exception);
 				// Выводим лог
-				console.log(MODULE_NAME + '->_ajax_do: error: Ошибка выполнения запроса => ' + msg);
-				// Вывод сообщения
-				alert('Ошибка выполнения запроса! ' + msg);
+				console.log(MODULE_NAME + '->_ajax_do: error: Ошибка выполнения запроса => ' + $msg);
+				// Выводим текст ошибки
+				_func_error_view(msg);
 			}
 		});
-	};
+	}
 
+
+
+
+
+
+	/** Обработчик ошибки */
+	function _func_error($jqXHR, exception) {
+		var msg = '';
+		if (jqXHR.status === 0) {
+			msg = 'Not connect.\n Verify Network.';
+		} else if (jqXHR.status == 404) {
+			msg = 'Requested page not found. [404]';
+		} else if (jqXHR.status == 500) {
+			msg = 'Internal Server Error [500].';
+		} else if (exception === 'parsererror') {
+			msg = 'Requested JSON parse failed.';
+		} else if (exception === 'timeout') {
+			msg = 'Time out error.';
+		} else if (exception === 'abort') {
+			msg = 'Ajax request aborted.';
+		} else {
+			msg = 'Uncaught Error.\n' + jqXHR.responseText;
+		}
+		return msg;
+	}
+
+
+
+
+
+	/** Вывод ошибки
+	 * @param string $msg Объект-массив
+	 */
+	function _func_error_view($msg) {
+		// Вывод сообщения
+		alert('Ошибка выполнения запроса! ' + $msg);
+	}
 
 
 
@@ -97,7 +120,7 @@
 	/** Преобразуем объект (массив) с данными в объект-FormData
 	 * @param object $data_object Объект-массив
 	 */
-	function _data_rework ($data_object) {
+	function _data_rework($data_object) {
 		// Получаем объект данных
 		var $data = new FormData();
 		// Проходим по переданным даннымы
@@ -116,7 +139,7 @@
 	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
 	 * @param string $html HTML-код обновления
 	 */
-	function _update_container ($container, $html) {
+	function _update_container($container, $html) {
 		var $element = $($container);
 		// Анимация оптическое угасание до 0 за 0,5 сек
 		$element.animate({'opacity': 0}, 500, function() {
@@ -146,45 +169,19 @@
 
 
 
-	/** Ajax-запрос по url, с последующим обновлением заданного контейнера (ID) результатом запроса
-	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
+	/** Ajax-запрос с данными из формы, с последующей обработкой функцией-обработчиком
+	 * @param string $func Функция обработки ответа сервера function($data)
+	 * @param string $id_form ID формы из которой беруться данные
+	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	object_module.url = function($container, $url) {
-		// Получаем объект данных
-		var $_data = new FormData();
+	object_module.form_func = function($func, $form, $type, $url) {
+		// Получаем массив данных из заданной формы (по id)
+		var $_data = new FormData($($form)[0]);
 		// Выводим лог
-		console.log(MODULE_NAME + '->url: ', $url, ' => ', '; container: ', $container);
-		// Формируем функцию-обработчик
-		var $func = function($html) {
-			// Обновление контейнера
-			_update_container($container, $html);
-		}
+		console.log(MODULE_NAME + '->form_func: ', $url, ' => ', '; data: ', $_data);
 		// Выполняем запрос
-		_ajax_do($func, $_data, $url, 'html');
-	};
-
-
-
-
-
-	/** Ajax-запрос с массивом данных, с последующим обновлением заданного контейнера (ID) результатом запроса
-	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
-	 * @param object $data Объект с данными
-	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
-	 */
-	object_module.array = function($container, $data, $url) {
-		// Получаем массив данных из объекта
-		var $_data = _data_rework($data);
-		// Выводим лог
-		console.log(MODULE_NAME + '->array: ', $url, ' => ', '; container: ', $container);
-		// Формируем функцию-обработчик
-		var $func = function($html) {
-			// Обновление контейнера
-			_update_container($container, $html);
-		}
-		// Выполняем запрос
-		_ajax_do($func, $_data, $url, 'html');
+		_ajax_do($func, $_data, $url, $type);
 	};
 
 
@@ -197,8 +194,6 @@
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
 	object_module.form = function($container, $form, $url) {
-		// Получаем массив данных из заданной формы (по id)
-		var $_data = new FormData($($form)[0]);
 		// Выводим лог
 		console.log(MODULE_NAME + '->form: ', $form, ' => ', '; container: ', $container);
 		// Формируем функцию-обработчик
@@ -206,26 +201,8 @@
 			// Обновление контейнера
 			_update_container($container, $html);
 		}
-		// Выполняем запрос
-		_ajax_do($func, $_data, $url, 'html');
-	};
-
-
-
-
-
-	/** Ajax-запрос по url, с последующей обработкой функцией-обработчиком
-	 * @param string $func Функция обработки ответа сервера function($data)
-	 * @param string $type Тип ответа html/json (по умолчанию - html)
-	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
-	 */
-	object_module.url_func = function($func, $type, $url) {
-		// Получаем массив данных из объекта
-		var $_data = _data_rework({});
-		// Выводим лог
-		console.log(MODULE_NAME + '->url_func: ', $url, ' => ', '; data: ', $_data);
-		// Выполняем запрос
-		_ajax_do($func, $_data, $url, $type);
+		// Вызов общей функции
+		object_module.form_func($func, $form, 'html', $url);
 	};
 
 
@@ -251,19 +228,59 @@
 
 
 
-	/** Ajax-запрос с данными из формы, с последующей обработкой функцией-обработчиком
+	/** Ajax-запрос с массивом данных, с последующим обновлением заданного контейнера (ID) результатом запроса
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
+	 * @param object $data Объект с данными
+	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
+	 */
+	object_module.array = function($container, $data, $url) {
+		// Выводим лог
+		console.log(MODULE_NAME + '->array: ', $url, ' => ', '; container: ', $container);
+		// Формируем функцию-обработчик
+		var $func = function($html) {
+			// Обновление контейнера
+			_update_container($container, $html);
+		}
+		// Вызов общей функции
+		object_module.array_func($func, $data, 'html', $url);
+	};
+
+
+
+
+
+	/** Ajax-запрос по url, с последующей обработкой функцией-обработчиком
 	 * @param string $func Функция обработки ответа сервера function($data)
-	 * @param string $id_form ID формы из которой беруться данные
 	 * @param string $type Тип ответа html/json (по умолчанию - html)
 	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
 	 */
-	object_module.form_func = function($func, $form, $type, $url) {
-		// Получаем массив данных из заданной формы (по id)
-		var $_data = new FormData($($form)[0]);
+	object_module.url_func = function($func, $type, $url) {
+		// Получаем массив данных из объекта
+		var $_data = _data_rework({});
 		// Выводим лог
-		console.log(MODULE_NAME + '->form_func: ', $url, ' => ', '; data: ', $_data);
+		console.log(MODULE_NAME + '->url_func: ', $url, ' => ', '; data: ', $_data);
 		// Выполняем запрос
 		_ajax_do($func, $_data, $url, $type);
+	};
+
+
+
+
+
+	/** Ajax-запрос по url, с последующим обновлением заданного контейнера (ID) результатом запроса
+	 * @param string $container Объект или маркер контейнера, который должен быть обновлён
+	 * @param string $url Ссылка по которой происходит запрос (по умолчанию - эта же страница)
+	 */
+	object_module.url = function($container, $url) {
+		// Выводим лог
+		console.log(MODULE_NAME + '->url: ', $url, ' => ', '; container: ', $container);
+		// Формируем функцию-обработчик
+		var $func = function($html) {
+			// Обновление контейнера
+			_update_container($container, $html);
+		}
+		// Вызов общей функции
+		object_module.url_func($func, 'html', $url);
 	};
 
 
@@ -307,10 +324,10 @@
 		// Выводим лог
 		console.log(MODULE_NAME + '->clean_group -> ' + $mask);
 		// Выполняем поиск элементов и их обработку
-		$($mask).each(function($indx, $element) {
+		$($mask).each(function($index, $element) {
 			var $obj_elem = $($element);
 			// Анимация оптическое угасание до 0 за 0,5 сек
-			$obj_elem.animate({'height':0},500,function() {
+			$obj_elem.animate({'height': 0}, 500, function() {
 				// Обновление информации в элементе
 				$obj_elem.html('');
 				// Анимация оптическое проявление до 1 за 0,5 сек
