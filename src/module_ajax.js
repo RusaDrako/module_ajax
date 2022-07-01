@@ -64,7 +64,7 @@
 			success: function($result_data) {
 				$function($result_data);
 			},
-			error: function($jqXHR, $textStatus, $errorThrown){
+			error: function($jqXHR, $textStatus, $errorThrown) {
 				var msg = '';
 				if (jqXHR.status === 0) {
 					msg = 'Not connect.\n Verify Network.';
@@ -119,11 +119,11 @@
 	function _update_container ($container, $html) {
 		var $element = $($container);
 		// Анимация оптическое угасание до 0 за 0,5 сек
-		$element.animate({'opacity':0},500,function() {
+		$element.animate({'opacity': 0}, 500, function() {
 			// Обновление информации в элементе
 			$element.html($html);
 			// Анимация оптическое проявление до 1 за 0,5 сек
-			$element.animate({'opacity':1},500);
+			$element.animate({'opacity': 1}, 500);
 		});
 	}
 
