@@ -10,7 +10,7 @@
 	/** Имя модуля */
 	var MODULE_NAME = 'module_ajax';
 	/** Версия модуля */
-	var MODULE_VERSION = '1.2.1';
+	var MODULE_VERSION = '1.2.2';
 	/* Автор модуля */
 	var MODULE_AUTHOR = 'Петухов Леонид';
 	/* Дата релиза модуля */
@@ -66,11 +66,11 @@
 			},
 			error: function($jqXHR, exception) {
 				// Получаем текст ошибки
-				var msg = _func_error($jqXHR, exception);
+				var $msg = _func_error($jqXHR, exception);
 				// Выводим лог
 				console.log(MODULE_NAME + '->_ajax_do: error: Ошибка выполнения запроса => ' + $msg);
 				// Выводим текст ошибки
-				_func_error_view(msg);
+				_func_error_view($msg);
 			}
 		});
 	}
@@ -81,19 +81,19 @@
 
 
 	/** Обработчик ошибки */
-	function _func_error($jqXHR, exception) {
+	function _func_error($jqXHR, $exception) {
 		var msg = '';
-		if (jqXHR.status === 0) {
+		if ($jqXHR.status === 0) {
 			msg = 'Not connect.\n Verify Network.';
-		} else if (jqXHR.status == 404) {
+		} else if ($jqXHR.status == 404) {
 			msg = 'Requested page not found. [404]';
-		} else if (jqXHR.status == 500) {
+		} else if ($jqXHR.status == 1500) {
 			msg = 'Internal Server Error [500].';
-		} else if (exception === 'parsererror') {
+		} else if ($exception === 'parsererror') {
 			msg = 'Requested JSON parse failed.';
-		} else if (exception === 'timeout') {
+		} else if ($exception === 'timeout') {
 			msg = 'Time out error.';
-		} else if (exception === 'abort') {
+		} else if ($exception === 'abort') {
 			msg = 'Ajax request aborted.';
 		} else {
 			msg = 'Uncaught Error.\n' + jqXHR.responseText;
