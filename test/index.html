@@ -1,0 +1,153 @@
+<html lang="ru" xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta name="viewport" content="width=device-width, height=device-height" />
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>Тест</title>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+		<script type="text/javascript" src="./../src/module_ajax.js"></script>
+
+	</head>
+
+	<body lang="ru">
+
+		<hr>
+		module_ajax.url
+		<a href="javascript:module_ajax.url('#result_url', 'test.php')">тест</a>
+		<hr>
+		<div id="result_url"></div>
+
+		<hr>
+		<br>
+		<br>
+		<br>
+		<hr>
+		module_ajax.url_func
+		<a href="javascript:test_url('#result_url_func')">тест</a>
+		<hr>
+		<div id="result_url_func"></div>
+		<script>
+		function test_url ($container) {
+			// Формируем функцию-обработчик
+			var $func = function($html) {
+				var $element = $($container);
+				// Анимация оптическое угасание до 0 за 0,5 сек
+				$element.animate({'opacity': 0}, 500, function() {
+					// Обновление информации в элементе
+					$element.html('---тест url_func---' + $html + '---');
+					// Анимация оптическое проявление до 1 за 0,5 сек
+					$element.animate({'opacity': 1}, 500);
+				});
+			}
+			module_ajax.url_func($func, 'html', 'test.php')
+		}
+		</script>
+
+		<hr>
+		<br>
+		<br>
+		<br>
+		<hr>
+		module_ajax.array
+		<a href="javascript:module_ajax.array('#result_array', {a: 123, b: 456}, 'test.php')">тест</a>
+		<hr>
+		<div id="result_array"></div>
+
+		<hr>
+		<br>
+		<br>
+		<br>
+		<hr>
+		module_ajax.array_func
+		<a href="javascript:test_array_func('#result_array_func')">тест</a>
+		<hr>
+		<div id="result_array_func"></div>
+		<script>
+		function test_array_func ($container) {
+			// Формируем функцию-обработчик
+			var $func = function($html) {
+				var $element = $($container);
+				// Анимация оптическое угасание до 0 за 0,5 сек
+				$element.animate({'opacity': 0}, 500, function() {
+					// Обновление информации в элементе
+					$element.html('---тест url_func---' + $html + '---');
+					// Анимация оптическое проявление до 1 за 0,5 сек
+					$element.animate({'opacity': 1}, 500);
+				});
+			}
+			module_ajax.array_func($func, {a: 789, b: 000}, 'html', 'test.php')
+		}
+		</script>
+
+		<hr>
+		<br>
+		<br>
+		<br>
+		<hr>
+		<form id="test_form">
+			name_1 <input type="text" name="name_1" value="test_f_1"/>
+			name_2 <input type="text" name="name_2" value="test_f_2"/>
+		</form>
+		module_ajax.form
+		<a href="javascript:module_ajax.form('#result_form', '#test_form', 'test.php')">тест</a>
+		<hr>
+		<div id="result_form"></div>
+
+		<hr>
+		<br>
+		<br>
+		<br>
+		<hr>
+		<form id="test_form_2">
+			name_1[] <input type="text" name="name_1[]" value="test_f_1"/>
+			name_1[] <input type="text" name="name_1[]" value="test_f_2"/>
+		</form>
+		module_ajax.form_func
+		<a href="javascript:test_form_func('#result_form_func', '#test_form_2')">тест</a>
+		<hr>
+		<div id="result_form_func"></div>
+		<script>
+		function test_form_func ($container, $form) {
+			// Формируем функцию-обработчик
+			var $func = function($html) {
+				var $element = $($container);
+				// Анимация оптическое угасание до 0 за 0,5 сек
+				$element.animate({'opacity': 0}, 500, function() {
+					// Обновление информации в элементе
+					$element.html('---тест url_func---' + $html + '---');
+					// Анимация оптическое проявление до 1 за 0,5 сек
+					$element.animate({'opacity': 1}, 500);
+				});
+			}
+			module_ajax.form_func($func, $form, 'html', 'test.php')
+		}
+		</script>
+
+		<hr>
+		<br>
+		<br>
+		<br>
+		<hr>
+		module_ajax.url
+		<a href="javascript:module_ajax.url('#result_error', 'test1.php')">тест_error</a>
+		<hr>
+		<div id="result_error"></div>
+
+
+
+
+		<script>
+		jQuery('document').ready(
+			() => {
+				module_ajax.url('#result_url', 'test.php');
+				test_url('#result_url_func');
+				module_ajax.array('#result_array', {a: 123, b: 456}, 'test.php');
+				test_array_func('#result_array_func');
+				module_ajax.form('#result_form', '#test_form', 'test.php');
+				test_form_func('#result_form_func', '#test_form_2');
+			}
+		);
+		</script>
+	</body>
+</html>
