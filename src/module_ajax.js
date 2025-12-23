@@ -88,6 +88,8 @@
 			msg = 'Time out error.';
 		} else if ($exception === 'abort') {
 			msg = 'Ajax request aborted.';
+		} else if (jqXHR === undefined) {
+			msg = 'Ошибка не определена:' . $exception;
 		} else {
 			msg = 'Uncaught Error.\n' + jqXHR.responseText;
 		}
